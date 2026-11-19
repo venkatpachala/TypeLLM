@@ -27,6 +27,10 @@ async def run_benchmark(limit: int):
         )
     )
 
+    # This will create ten coroutine objects
+    # gather() schedules them for concurrent execution
+
+
     elapsed = time.perf_counter() - start
 
     print(f"\nConcurrency limit: {limit}")
