@@ -7,11 +7,16 @@ class Clock:
     def __call__(self): return self.value
 
 @pytest.mark.asyncio
-async def test_ten_simultaneous_submissions_admit_only_two():
+async def test_twelve_simultaneous_submissions_admit_only_six():
     clock = Clock()
-    s = Scheduler(2, clock)
-    decisions = await asyncio.gather(*(s.submit(f'r{i}', 2, 3) for i in range(10)))
-    assert sum(d.accepted for d in decisions) == 2
+    s = Scheduler(3, clock)
+
+    decisions = await asyncio.gather(
+        *(s.submit(f'r{i}', 2, 5) for i in range(12))
+    )
+
+    assert sum(d.accepted for d in decisions) == 6
+    assert sum(not d.accepted for d in decisions) == 6
 
 @pytest.mark.asyncio
 async def test_cancel_compacts_fifo_prediction():
